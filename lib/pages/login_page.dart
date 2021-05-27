@@ -1,8 +1,9 @@
+import 'package:chat_app/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/widgets/custom_input.dart';
-import 'package:chat_app/widgets/login_labels.dart';
-import 'package:chat_app/widgets/login_logo.dart';
+import 'package:chat_app/widgets/auth_labels.dart';
+import 'package:chat_app/widgets/auth_logo.dart';
 import 'package:chat_app/widgets/terms_and_conditions.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 
@@ -12,14 +13,30 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xffF2F2F2),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            LoginLogo(),
-            _Form(),
-            LoginLabels(),
-            TermsAndConditions(),
-          ],
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                AuthenticationLogo(
+                  title: "Messenger",
+                ),
+                _Form(),
+                AuthenticationLabels(
+                    title: 'Dont have an account?',
+                    subtitle: 'Create an account now!',
+                    callback: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupPage()),
+                      );
+                    }),
+                TermsAndConditions(),
+              ],
+            ),
+          ),
         ),
       ),
     );

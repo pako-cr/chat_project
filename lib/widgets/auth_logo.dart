@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginLogo extends StatelessWidget {
+class AuthenticationLogo extends StatelessWidget {
+  final String title;
+
+  const AuthenticationLogo({
+    Key key,
+    @required this.title,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -13,7 +20,7 @@ class LoginLogo extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text('Messenger', style: TextStyle(fontSize: 30))
+            Text(this.title, style: TextStyle(fontSize: 30))
           ],
         ),
       ),
