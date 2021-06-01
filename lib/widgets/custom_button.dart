@@ -14,11 +14,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      elevation: 2,
-      highlightElevation: 5,
-      color: this.enabled ? Colors.blue[400] : Colors.grey,
-      shape: StadiumBorder(),
+    return ElevatedButton(
       onPressed: onPressed,
       child: Container(
         width: double.infinity,
@@ -35,5 +31,26 @@ class CustomButton extends StatelessWidget {
         ),
       ),
     );
+    // return RaisedButton(
+    //   elevation: 2,
+    //   highlightElevation: 5,
+    //   color: this.enabled ? Colors.blue[400] : Colors.grey,
+    //   shape: StadiumBorder(),
+    //   onPressed: onPressed,
+    //   child: Container(
+    //     width: double.infinity,
+    //     height: 50,
+    //     child: Center(
+    //       child: Text(
+    //         this.title,
+    //         style: TextStyle(
+    //           color: Colors.white,
+    //           fontSize: 18,
+    //           fontWeight: FontWeight.w500,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

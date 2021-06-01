@@ -1,6 +1,4 @@
-import 'package:chat_app/pages/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/navigator.dart';
 
 class AuthenticationLabels extends StatelessWidget {
   final String title;
