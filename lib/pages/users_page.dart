@@ -1,6 +1,8 @@
 import 'package:chat_app/models/user.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersPage extends StatefulWidget {
@@ -32,10 +34,13 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final user = authService.user;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My name',
+          user.name,
           style: TextStyle(color: Colors.black87),
         ),
         elevation: 1,
@@ -45,7 +50,10 @@ class _UsersPageState extends State<UsersPage> {
             Icons.exit_to_app,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            // TODO: Disconnect of socket server...
+            this.logout();
+          },
         ),
         actions: <Widget>[
           Container(
@@ -133,5 +141,10 @@ class _UsersPageState extends State<UsersPage> {
 
     if (mounted) setState(() {});
     _refreshController.loadComplete();
+  }
+
+  void logout() {
+    Navigator.pushReplacementNamed(context, 'login');
+    AuthService.logout();
   }
 }

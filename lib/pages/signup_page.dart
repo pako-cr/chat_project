@@ -1,9 +1,12 @@
+import 'package:chat_app/helpers/show_alert.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/widgets/auth_logo.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/auth_labels.dart';
 import 'package:chat_app/widgets/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -44,25 +47,23 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+  final nicknameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   bool _validForm = false;
 
-  void validateForm() {
-    this.emailTextController.addListener(() {
-      this._validForm = this.emailTextController.text.isNotEmpty &&
+  void validForm() {
+    setState(() {
+      this._validForm = this.nicknameTextController.text.isNotEmpty &&
+          this.emailTextController.text.isNotEmpty &&
           this.passwordTextController.text.isNotEmpty;
-    });
-
-    this.passwordTextController.addListener(() {
-      this._validForm = this.passwordTextController.text.isNotEmpty &&
-          this.emailTextController.text.isNotEmpty;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    validateForm();
+    final authService = Provider.of<AuthService>(context, listen: true);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -71,14 +72,16 @@ class __FormState extends State<_Form> {
           CustomInput(
             icon: Icons.account_circle_outlined,
             placeholder: 'Nickname',
-            textController: emailTextController,
+            textController: nicknameTextController,
             keyboardType: TextInputType.emailAddress,
+            onChanged: (_) => this.validForm(),
           ),
           CustomInput(
             icon: Icons.email_outlined,
             placeholder: 'Email',
             textController: emailTextController,
             keyboardType: TextInputType.emailAddress,
+            onChanged: (_) => this.validForm(),
           ),
           CustomInput(
             icon: Icons.lock_outline,
@@ -86,20 +89,29 @@ class __FormState extends State<_Form> {
             textController: passwordTextController,
             keyboardType: TextInputType.visiblePassword,
             isPassword: true,
+            onChanged: (_) => this.validForm(),
           ),
-          // CustomInput(
-          //   icon: Icons.lock_outline,
-          //   placeholder: 'Re-enter Password',
-          //   textController: passwordTextController,
-          //   keyboardType: TextInputType.visiblePassword,
-          //   isPassword: true,
-          // ),
           CustomButton(
-            title: 'Register',
-            onPressed: () {
-              print('Register button pressed!');
-            },
-            enabled: _validForm,
+            title: 'Sign Up',
+            onPressed: (authService.authInProgress || !this._validForm)
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+
+                    final signUpResponse = await authService.signUp(
+                        nicknameTextController.text.trim(),
+                        emailTextController.text.trim(),
+                        passwordTextController.text.trim());
+
+                    if (signUpResponse.toString().isEmpty) {
+                      // TODO: Connect ot socket server
+
+                      Navigator.pushReplacementNamed(context, 'users');
+                    } else {
+                      showAlert(context, 'Error', signUpResponse);
+                    }
+                  },
+            enabled: (authService.authInProgress || !this._validForm),
           ),
         ],
       ),
