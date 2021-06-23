@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:chat_app/models/signup_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:chat_app/models/user.dart';
-import 'package:chat_app/models/login_response.dart';
 import 'package:chat_app/global/environment.dart';
+import 'package:chat_app/models/login_response.dart';
+import 'package:chat_app/models/signup_response.dart';
+import 'package:chat_app/models/user.dart';
 
 class AuthService with ChangeNotifier {
   User user;
@@ -43,10 +43,10 @@ class AuthService with ChangeNotifier {
 
     final data = {'name': nickname, 'email': email, 'password': password};
 
-    var url = Uri.http('${Environment.apiUrl}', '/api/login/new/');
+    var uri = Uri.http('${Environment.apiUrl}', '/api/login/new/');
 
     final resp = await http.post(
-      url,
+      uri,
       body: jsonEncode(data),
       headers: {'Content-Type': 'application/json'},
     );
@@ -72,10 +72,10 @@ class AuthService with ChangeNotifier {
 
     final data = {'email': email, 'password': password};
 
-    var url = Uri.http('${Environment.apiUrl}', '/api/login/');
+    var uri = Uri.http('${Environment.apiUrl}', '/api/login/');
 
     final resp = await http.post(
-      url,
+      uri,
       body: jsonEncode(data),
       headers: {'Content-Type': 'application/json'},
     );
@@ -97,10 +97,10 @@ class AuthService with ChangeNotifier {
   Future isLogedIn() async {
     final token = await this._storage.read(key: 'token');
 
-    var url = Uri.http('${Environment.apiUrl}', '/api/login/renew/');
+    var uri = Uri.http('${Environment.apiUrl}', '/api/login/renew/');
 
     final resp = await http.get(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'x-token': token,

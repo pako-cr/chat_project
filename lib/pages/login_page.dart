@@ -1,11 +1,12 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:chat_app/helpers/show_alert.dart';
-import 'package:chat_app/widgets/auth_labels.dart';
-import 'package:chat_app/widgets/auth_logo.dart';
 import 'package:chat_app/pages/signup_page.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
+import 'package:chat_app/widgets/auth_labels.dart';
+import 'package:chat_app/widgets/auth_logo.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/terms_and_conditions.dart';
@@ -19,7 +20,7 @@ class LoginPage extends StatelessWidget {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: MediaQuery.of(context).size.height * 1.0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -66,6 +67,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: true);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -99,8 +101,7 @@ class __FormState extends State<_Form> {
                         passwordTextController.text.trim());
 
                     if (loginOk) {
-                      // TODO: Connect ot socket server
-
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'users');
                     } else {
                       showAlert(context, 'Error', 'Error');
